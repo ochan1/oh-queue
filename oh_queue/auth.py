@@ -102,10 +102,10 @@ def authorized():
 
     if 'berkeley.edu' not in email:
         message = 'UC Berkeley email required to sign up.'
-        return redirect(url_for('error', message=message))
+        return redirect(url_for('index', message=message))
     
     name = email[:email.index("@")]
-    is_staff = True
+    is_staff = 'hkn.eecs.berkeley.edu' in email
 
     user = user_from_email(name, email, is_staff)
     return authorize_user(user)

@@ -42,9 +42,9 @@ def not_in_production(f):
 def seed_data():
     print('Seeding...')
 
-    assignments = [Assignment(name=name, course="ok", visible=True) for name in ['Hog', 'Maps', 'Ants', 'Scheme']]
-    locations = [Location(name=name, course="ok", visible=True, online=True, link="") for name in
-                 ['109 Morgan', '241 Cory', '247 Cory']]
+    assignments = [Assignment(name=name, course="HKN", visible=True) for name in ['Hog', 'Maps', 'Ants', 'Scheme']]
+    locations = [Location(name=name, course="HKN", visible=True, online=True, link="") for name in
+                 ['Online']]
     questions = list(range(1, 16)) + ['Other', 'EC', 'Checkoff']
     descriptions = ['', 'I\'m in the hallway', 'SyntaxError on Line 5']
 
@@ -74,7 +74,7 @@ def seed_data():
             location=random.choice(locations),
             question=random.choice(questions),
             description=random.choice(descriptions),
-            course="ok"
+            course="HKN"
         )
         db.session.add(ticket)
 
@@ -84,7 +84,7 @@ def seed_data():
         location=random.choice(locations),
         capacity=5,
         status=AppointmentStatus.pending,
-        course="ok",
+        course="HKN",
         helper=random.choice(students)
     ) for _ in range(70)]
 
@@ -103,7 +103,7 @@ def seed_data():
         assignment=random.choice(assignments),
         question=random.choice(questions),
         description=random.choice(descriptions),
-        course="ok",
+        course="HKN",
     ) for _ in range(120)]
 
     for signup in signups:
@@ -120,11 +120,11 @@ def seed_data():
             attendees=[GroupAttendance(
                 user=student,
                 group_attendance_status=GroupAttendanceStatus.present,
-                course="ok"
+                course="HKN"
             ) for student in random.sample(students, 5)],
             call_url="",
             doc_url="",
-            course="ok",
+            course="HKN",
         ) for _ in range(120)]
 
     for group in groups:

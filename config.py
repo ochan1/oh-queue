@@ -5,6 +5,7 @@ ENV = os.getenv('OH_QUEUE_ENV', 'dev')
 
 if ENV in ('dev', 'staging'):
     DEBUG = True
+    DEBUG_TB_INTERCEPT_REDIRECTS = False
 elif ENV == 'prod':
     DEBUG = False
 
