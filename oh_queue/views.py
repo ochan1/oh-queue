@@ -10,7 +10,7 @@ from os import getenv
 from urllib.parse import urljoin
 
 import requests
-from flask import abort, render_template, request, url_for, copy_current_request_context
+from flask import abort, render_template, url_for, copy_current_request_context, redirect
 from flask_login import current_user
 from flask_socketio import emit, join_room, leave_room
 from sqlalchemy import func, desc
@@ -87,14 +87,16 @@ def location_json(location):
 
 def get_online_location():
     online_location = Location.query.filter_by(course=get_course(), name="Online").one_or_none()
-    online_visible = ConfigEntry.query.filter_by(key="online_active", course=get_course()).one().value == "true"
+    online_visible = True
+
     if online_location is None:
         online_location = Location(name="Online", visible=online_visible, course=get_course(), online=True, link="")
         db.session.add(online_location)
         db.session.commit()
-    else:
-        online_location.visible = online_visible
-        db.session.commit()
+
+    online_location.visible = online_visible
+    db.session.commit()
+
     return online_location
 
 
@@ -208,9 +210,10 @@ def emit_state(attrs, broadcast=False, callback=None):
         assignments = Assignment.query.filter_by(course=get_course()).all()
         state['assignments'] = [assignment_json(assignment) for assignment in assignments]
     if 'locations' in attrs:
-        locations = Location.query.filter(Location.course == get_course(), Location.name != "Online").all()
+        locations = Location.query.filter(Location.course == get_course()).all()
         state['locations'] = [location_json(location) for location in locations]
         state["locations"].append(location_json(get_online_location()))
+        print(state['locations'])
     if 'config' in attrs:
         state['config'] = config_json()
     if 'appointments' in attrs:
@@ -398,8 +401,12 @@ def index(*args, **kwargs):
     check = db.session.query(ConfigEntry).filter_by(course=get_course()).first()
     if not check:
         init_config()
-    return render_template('index.html', course_name=format_coursecode(get_course()))
+    return render_template('index.html', course_name="HKN Tutoring")
 
+@app.route('/test')
+def test():
+    print(app.config.get("SQLALCHEMY_DATABASE_URI"))
+    return redirect(url_for('index'))
 
 def socket_error(message, category='danger', ticket_id=None):
     redirect = url_for('index')

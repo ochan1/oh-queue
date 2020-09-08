@@ -14,6 +14,8 @@ from raven.contrib.flask import Sentry
 # Initialize the application
 app = Flask(__name__)
 app.config.from_object('config')
+app.config["GOOGLE_ID"] = "80342984984-6lvqn134m1uevuqbnaop6jhlb6qcotiv.apps.googleusercontent.com"
+app.config["GOOGLE_SECRET"] = "CQNyFBWBV7y7eEq_qgSlsJk2"
 
 if not app.debug:
     sentry = Sentry(app,

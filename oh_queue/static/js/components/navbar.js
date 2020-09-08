@@ -65,7 +65,7 @@ let Navbar = ({ state, mode }) => {
                                 </ul>
                             </li>
                             :
-                            <li><a href="/login/">Staff Login</a></li>
+                            <li><a href="/login/">HKN Tutor Login</a></li>
                         }
                     </ul>
                 </div>

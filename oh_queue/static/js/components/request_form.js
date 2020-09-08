@@ -99,10 +99,10 @@ function RequestForm(props) {
                                               className="selectpicker form-control form-left"
                                               data-live-search="true" data-size="8" data-width="60%"
                                               data-style="btn-lg btn-default" id="assignment_id"
-                                              name="assignment_id" title="Assignment" required
+                                              name="assignment_id" title="Class" required
                                               disabled={disabled && !appointments}/>
                                 <input className="form-control form-right" type="text" id="question"
-                                       name="question" title="Question" placeholder="Question" required
+                                       name="question" title="Assignment" placeholder="Assignment" required
                                        disabled={disabled && !appointments}/>
                             </div>
                         </div>

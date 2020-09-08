@@ -4,20 +4,21 @@ let Jumbotron = ({ state }) => {
     const party_enabled = state.config.party_enabled;
     if (!state.currentUser) {
         var titleText = 'Hi! Please sign in';
-        var subtitleText = 'Sign in with your course OK account to request help';
+        var subtitleText = 'Sign in with your UC Berkeley account to request help from HKN Tutoring';
         var contents = (
             <a className="btn btn-block btn-jumbo btn-outline" href="/login">
-                Sign in with Ok
+                Sign in with Google
             </a>
         );
     } else if (!isQueueOpen) {
         var titleText = `Hello, ${state.currentUser.shortName}`;
-        var subtitleText = 'The queue is currently closed. Check back later!';
-        var contents = <RequestForm state={state} />;
+        var subtitleText = 'HKN is now offline for tutoring. Check back later!';
+        var contents = <RequestForm state={state} disabled={true}
+                                    appointments={appointments}/>;
     } else {
         var titleText = `Hello, ${state.currentUser.shortName}`;
-        var subtitleText = 'Fill out the form to request help!';
-        var contents = <RequestForm state={state} />;
+        var subtitleText = 'Fill out the form to request help from HKN Tutoring!';
+        var contents = <RequestForm state={state} appointments={appointments}/>;
     }
 
     if (state.currentUser && party_enabled) {

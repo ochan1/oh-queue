@@ -16,7 +16,7 @@ COURSE_DOMAINS = {"ok": "oh.cs61a.org"}
 
 def get_course(domain=None):
     if app.config["ENV"] != "prod":
-        return "ok"
+        return "HKN"
     if not domain:
         domain = request.headers["HOST"]
     if domain not in DOMAIN_COURSES:

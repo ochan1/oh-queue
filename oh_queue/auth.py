@@ -9,26 +9,29 @@ from oh_queue.models import db, User
 auth = Blueprint('auth', __name__)
 auth.config = {}
 
+
 oauth = OAuth()
 
 @auth.record
 def record_params(setup_state):
     app = setup_state.app
     server_url = app.config.get('OK_SERVER_URL')
+
     auth.ok_auth = oauth.remote_app(
-        'ok-server',
-        consumer_key=app.config.get('OK_KEY'),
-        consumer_secret=app.config.get('OK_SECRET'),
+        'google',
+        consumer_key=app.config.get('GOOGLE_ID'),
+        consumer_secret=app.config.get('GOOGLE_SECRET'),
         request_token_params={
             'scope': 'email',
             'state': lambda: security.gen_salt(10)
         },
-        base_url=server_url + '/api/v3/',
+        base_url='https://www.googleapis.com/oauth2/v1/',
         request_token_url=None,
         access_token_method='POST',
-        access_token_url=server_url + '/oauth/token',
-        authorize_url=server_url + '/oauth/authorize',)
-    auth.debug = app.config.get('DEBUG')
+        access_token_url='https://accounts.google.com/o/oauth2/token',
+        authorize_url='https://accounts.google.com/o/oauth2/auth',
+    )
+    #auth.debug = app.config.get('DEBUG')
 
     @auth.ok_auth.tokengetter
     def get_access_token(token=None):
@@ -54,13 +57,14 @@ def authorize_user(user):
 def user_from_email(name, email, is_staff):
     """Get a User with the given email, or create one."""
     from oh_queue.course_config import get_course
-    user = User.query.filter_by(email=email, course=get_course()).one_or_none()
+    user = User.query.filter_by(email=email, course="HKN").one_or_none()
     if not user:
-        user = User(name=name, email=email, course=get_course(), is_staff=is_staff)
+        user = User(name=name, email=email, course="HKN", is_staff=is_staff)
     else:
         user.name = name
         user.is_staff = is_staff
-        user.course = get_course()
+        user.course = "HKN"
+
     db.session.add(user)
     db.session.commit()
     return user
@@ -80,10 +84,6 @@ def try_login():
 @auth.route('/login/authorized')
 def authorized():
     from oh_queue.course_config import get_endpoint
-    message = request.args.get('error')
-    if message:
-        message = 'Ok OAuth error: %s' % (message)
-        return redirect(url_for('error', message=message))
     try:
         auth_resp = auth.ok_auth.authorized_response()
         if auth_resp is None:
@@ -92,21 +92,21 @@ def authorized():
     except OAuthException as ex:
         message = str(ex)
         return redirect(url_for('error', message=message))
+
     token = auth_resp['access_token']
     session['access_token'] = (token, '')  # (access_token, secret)
-    info = auth.ok_auth.get('user').data['data']
+
+    info = auth.ok_auth.get('userinfo').data
+
     email = info['email']
-    name = info['name']
-    if not name:
-        name = email
-    if ', ' in name:
-        last, first = name.split(', ')
-        name = first + ' ' + last
-    is_staff = False
-    offering = get_endpoint()
-    for p in info['participations']:
-        if p['course']['offering'] == offering and p['role'] != 'student':
-            is_staff = True
+
+    if 'berkeley.edu' not in email:
+        message = 'UC Berkeley email required to sign up.'
+        return redirect(url_for('error', message=message))
+    
+    name = email[:email.index("@")]
+    is_staff = True
+
     user = user_from_email(name, email, is_staff)
     return authorize_user(user)
 
@@ -135,3 +135,5 @@ def testing_authorized():
 def init_app(app):
     app.register_blueprint(auth)
     login_manager.init_app(app)
+
+
