@@ -9,7 +9,7 @@ if ENV in ('dev', 'staging'):
 elif ENV == 'prod':
     DEBUG = False
 
-if ENV == 'dev':
+if ENV in ('dev', 'prod'):
     SECRET_KEY = 'dev'
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///' + os.path.join(basedir, 'app.db')).replace('mysql://', 'mysql+pymysql://')
 else:
@@ -19,8 +19,8 @@ else:
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 DATABASE_CONNECT_OPTIONS = {}
 
-if ENV == 'prod':
-    SQLALCHEMY_POOL_SIZE = 5
+#if ENV == 'prod':
+#    SQLALCHEMY_POOL_SIZE = 5
 
 LOCAL_TIMEZONE = os.getenv('TIMEZONE', 'US/Pacific')
 

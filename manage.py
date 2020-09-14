@@ -8,7 +8,6 @@ import alembic
 import names
 
 from alembic.config import Config
-from flask_debugtoolbar import DebugToolbarExtension
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 from oh_queue import app, socketio
@@ -152,8 +151,9 @@ def initdb():
 @manager.command
 @not_in_production
 def server():
-    DebugToolbarExtension(app)
-    socketio.run(app, host=app.config.get('HOST'), port=app.config.get('PORT'))
+    #DebugToolbarExtension(app)
+    socketio.run(app)
+    #socketio.run(app, host=app.config.get('HOST'), port=app.config.get('PORT'))
 
 
 if __name__ == '__main__':
