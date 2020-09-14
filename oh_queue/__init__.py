@@ -38,8 +38,8 @@ socketio = SocketIO(app)
 import oh_queue.views
 
 # Start slack cron job
-import oh_queue.slack
-oh_queue.slack.start_flask_job(app)
+# import oh_queue.slack
+# oh_queue.slack.start_flask_job(app)
 
 # Caching
 @app.after_request

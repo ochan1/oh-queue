@@ -1368,7 +1368,8 @@ def test_slack():
 @socketio.on("appointment_summary")
 @is_staff
 def appointment_summary():
-    send_appointment_summary(app, get_course())
+    print("Not implemented")
+    #send_appointment_summary(app, get_course())
 
 
 def leave_current_groups():
