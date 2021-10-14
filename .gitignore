@@ -70,3 +70,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Secret Keys
+secret_key/google_keys.py

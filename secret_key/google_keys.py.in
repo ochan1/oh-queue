@@ -1,0 +1,24 @@
+# Python template to insert in your Google Keys
+
+"""
+Settings used during registration:
+ - Project settings must be "External" to allow for berkeley.edu emails
+    - "Internal" only allows hkn.eecs.berkeley.edu emails to pass through
+ - Authorized redirect URIs:
+    - https://hkn-tutoring.eecs.berkeley.edu/login/authorized
+    - http://localhost:5000/login/authorized
+    - http://127.0.0.1:5000/login/authorized
+ - Support Email + Developer contact information:
+    - OPS email is used
+ - App domain:
+    - Application home page: http://hkn-tutoring.eecs.berkeley.edu
+    - Application private policy link:
+        https://security.berkeley.edu/policy/privacy-statement-uc-berkeley-websites
+ - Authorized Domains:
+    - berkeley.edu
+
+Get credentials at: https://console.cloud.google.com/apis/credentials
+"""
+
+GOOGLE_ID = "Client ID under your Credentials in your Google Cloud Console"
+GOOGLE_SECRET = "Client secret under your Credentials in your Google Cloud Console"

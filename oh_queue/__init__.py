@@ -11,13 +11,15 @@ from oh_queue import assets, auth
 from oh_queue.models import db, TicketStatus
 from raven.contrib.flask import Sentry
 
+# Get the Google API Keys
+from secret_key import google_keys
+
 # Initialize the application
 app = Flask(__name__)
 app.config.from_object('config')
 
-#TODO: Change to HKN account
-app.config["GOOGLE_ID"] = "80342984984-6lvqn134m1uevuqbnaop6jhlb6qcotiv.apps.googleusercontent.com"
-app.config["GOOGLE_SECRET"] = "CQNyFBWBV7y7eEq_qgSlsJk2"
+app.config["GOOGLE_ID"] = google_keys.GOOGLE_ID
+app.config["GOOGLE_SECRET"] = google_keys.GOOGLE_SECRET
 
 
 
