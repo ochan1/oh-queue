@@ -6,6 +6,8 @@ from werkzeug import security
 
 from oh_queue.models import db, User
 
+DEVELOPER_URLS = ['http://localhost:5000/', 'http://127.0.0.1:5000/']
+
 auth = Blueprint('auth', __name__)
 auth.config = {}
 
@@ -71,7 +73,13 @@ def user_from_email(name, email, is_staff):
 
 @auth.route('/login/')
 def login():
-    callback = url_for(".authorized", _external=True)
+    root_url = request.url_root
+    url_scheme = 'http'
+    if root_url in DEVELOPER_URLS:
+        url_scheme='http'
+    else:
+        url_scheme='https'
+    callback = url_for(".authorized", _scheme=url_scheme, _external=True)
     return auth.ok_auth.authorize(callback=callback)
 
 @auth.route('/assist/')
